@@ -1,6 +1,7 @@
 const canvas = document.getElementById('app'),
     context = canvas.getContext('2d'),
-    boxSize = 20;
+    boxSize = 20,
+    boxCount = 30;
 
 let direction = null,
     food = null,
@@ -37,13 +38,13 @@ function drawFood () {
     context.fillRect(food.x, food.y, boxSize, boxSize);
 };
 
-function drawBG(){
+function clearCanvas(){
     context.fillStyle = "black";
-    context.fillRect(0, 0, 30 * boxSize, 30 * boxSize);
+    context.fillRect(0, 0, boxCount * boxSize, boxCount * boxSize);
 };
 
 function isGameOver () {
-    if (snake[0].x > 29 * boxSize && direction === "right") {
+    if (snake[0].x > (boxCount - 1) * boxSize && direction === "right") {
         return true;
     }
 
@@ -51,7 +52,7 @@ function isGameOver () {
         return true;
     }
 
-    if (snake[0].y > 29 * boxSize && direction === "down") {
+    if (snake[0].y > (boxCount - 1) * boxSize && direction === "down") {
         return true;
     }
 
@@ -72,9 +73,10 @@ function play () {
     if (isGameOver()) {
         clearInterval(game);
         alert('Game Over');
+        return;
     }
 
-    drawBG();
+    clearCanvas();
     drawSnake();
     drawFood();
 
@@ -101,8 +103,8 @@ function play () {
     snake.unshift(newHead);
 
     if (newHead.x === food.x && newHead.y === food.y) {
-        food.x = Math.floor(Math.random() * 29 +1) * boxSize;
-        food.y = Math.floor(Math.random() * 29 +1) * boxSize;
+        food.x = Math.floor(Math.random() * (boxCount - 1) +1) * boxSize;
+        food.y = Math.floor(Math.random() * (boxCount - 1) +1) * boxSize;
     } else {
         snake.pop();
     }
@@ -111,12 +113,12 @@ function play () {
 function start () {
     direction = 'right';
     food = {
-        x: Math.floor(Math.random() * 29 + 1) * boxSize,
-        y: Math.floor(Math.random() * 29 + 1) * boxSize
+        x: Math.floor(Math.random() * (boxCount - 1) + 1) * boxSize,
+        y: Math.floor(Math.random() * (boxCount - 1) + 1) * boxSize
     };
     snake = [{
-        x: 15 * boxSize,
-        y: 15 * boxSize,
+        x: (boxCount / 2) * boxSize,
+        y: (boxCount / 2) * boxSize,
     }];
     game = setInterval(play, 100);
 };
